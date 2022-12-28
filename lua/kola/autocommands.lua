@@ -1,6 +1,13 @@
+local function view_commit()
+	local line = vim.fn.getline(".")
+	vim.cmd("DiffviewOpen " .. line:firstword() .. "^!")
+end
+
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "git",
-	command = "nnoremap <buffer><silent> <cr> <cmd>lua require('kola.diffview').view_commit()<cr>",
+	callback = function()
+		vim.keymap.set("n", "<cr>", view_commit, { noremap = true, silent = true, buffer = true })
+	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
@@ -10,7 +17,9 @@ vim.api.nvim_create_autocmd("FileType", {
 
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitiveblame",
-	command = "nnoremap <buffer><silent> <cr> <cmd>lua require('kola.diffview').view_commit()<cr>",
+	callback = function()
+		vim.keymap.set("n", "<cr>", view_commit, { noremap = true, silent = true, buffer = true })
+	end,
 })
 
 vim.api.nvim_create_autocmd("FileType", {
