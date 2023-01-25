@@ -3,6 +3,19 @@ if not status_ok then
 	return
 end
 
+local powershell_options = {
+	shell = vim.fn.executable("pwsh") == 1 and "pwsh" or "powershell",
+	shellcmdflag = "-NoLogo -NoProfile -ExecutionPolicy RemoteSigned -Command [Console]::InputEncoding=[Console]::OutputEncoding=[System.Text.Encoding]::UTF8;",
+	shellredir = "-RedirectStandardOutput %s -NoNewWindow -Wait",
+	shellpipe = "2>&1 | Out-File -Encoding UTF8 %s; exit $LastExitCode",
+	shellquote = "",
+	shellxquote = "",
+}
+
+for option, value in pairs(powershell_options) do
+	vim.opt[option] = value
+end
+
 local vertical_width = vim.o.columns * 0.35
 
 local get_package_root = require("kola.utils").get_package_root
@@ -108,14 +121,14 @@ vim.keymap.set("n", "<leader>E2E", vert_e2e_test)
 
 local function set_terminal_keymaps()
 	local opts = { noremap = true }
-	vim.keymap.set( "t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+	vim.keymap.set("t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
 	vim.keymap.set("t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
-	vim.keymap.set( "t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
-	vim.keymap.set( "t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
-	vim.keymap.set( "t", "<F12>", vert_toggle , opts)
+	vim.keymap.set("t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+	vim.keymap.set("t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
+	vim.keymap.set("t", "<F12>", vert_toggle, opts)
 end
 
-local augroup = vim.api.nvim_create_augroup("ToggleTerm", {clear = true})
+local augroup = vim.api.nvim_create_augroup("ToggleTerm", { clear = true })
 local toggleterm_pattern = { "term://*#toggleterm#*", "term://*::toggleterm::*" }
 
 vim.api.nvim_create_autocmd("TermOpen", {
@@ -123,4 +136,3 @@ vim.api.nvim_create_autocmd("TermOpen", {
 	pattern = toggleterm_pattern,
 	callback = set_terminal_keymaps,
 })
-
