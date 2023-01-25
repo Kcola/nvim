@@ -10,6 +10,21 @@ vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { 
 vim.lsp.handlers["textDocument/signatureHelp"] =
 	vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded", width = 100 })
 
+vim.api.nvim_create_augroup("lsp_autocommands", {
+	clear = false,
+})
+
+local register_autocommands = function()
+	-- diagnostics hover autocommand
+	vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
+		group = "lsp_autocommands",
+		buffer = bufnr,
+		callback = function()
+			vim.diagnostic.open_float(nil, { focus = false })
+		end,
+	})
+end
+
 -- Setup mason so it can manage external tooling
 require("mason").setup()
 
@@ -22,6 +37,7 @@ local on_attach = function(_, bufnr)
 	--
 	-- In this case, we create a function that lets us more easily define mappings specific
 	-- for LSP related items. It sets the mode, buffer and description for us each time.
+
 	local nmap = function(keys, func, desc)
 		if desc then
 			desc = "LSP: " .. desc
@@ -51,19 +67,35 @@ local on_attach = function(_, bufnr)
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, "[W]orkspace [L]ist Folders")
 
-	-- Create a command `:Format` local to the LSP buffer
-	vim.api.nvim_buf_create_user_command(bufnr, "Format", function(_)
-		if vim.lsp.buf.format then
-			vim.lsp.buf.format()
-		elseif vim.lsp.buf.formatting then
-			vim.lsp.buf.formatting()
-		end
-	end, { desc = "Format current buffer with LSP" })
+	register_autocommands()
+end
+
+-- Diagnostics UI
+-- Code actions doesn't have a global handler so we need to roll our sleeves a bit
+--------------------------------------------------------------------------------------------------
+
+vim.diagnostic.config({
+	virtual_text = false,
+	signs = true,
+	severity_sort = true,
+	float = {
+		border = "rounded",
+		source = "always",
+		header = "",
+		prefix = "",
+		width = 100,
+	},
+})
+
+local signs = { Error = " ", Warn = " ", Hint = " ", Info = " " }
+for type, icon in pairs(signs) do
+	local hl = "DiagnosticSign" .. type
+	vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
 end
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { "tsserver", "sumneko_lua", "omnisharp" }
+local servers = { "tsserver", "sumneko_lua", "omnisharp", "eslint" }
 
 -- Ensure the servers above are installed
 require("mason-lspconfig").setup({
@@ -282,7 +314,7 @@ vim.ui.select = function(_items, opts, on_choice)
 end
 
 -- Diagnostic keymaps
-vim.keymap.set("n", "[d", vim.diagnostic.goto_prev)
-vim.keymap.set("n", "]d", vim.diagnostic.goto_next)
+vim.keymap.set("n", "[g", vim.diagnostic.goto_prev)
+vim.keymap.set("n", "]g", vim.diagnostic.goto_next)
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)

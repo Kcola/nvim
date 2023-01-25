@@ -194,7 +194,7 @@ end
 require("telescope").setup({
 	defaults = {
 		path_display = { "truncate" },
-		file_ignore_patterns = { "node_modules", "lib", ".git" },
+		file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll" },
 		prompt_prefix = " >",
 		color_devicons = true,
 		mappings = {
@@ -268,8 +268,6 @@ require("telescope").setup({
 
 pcall(require("telescope").load_extension, "fzf")
 
-P(IS_WINDOWS and "Windows" or "MacOS")
-
 local search_vim_config = function()
 	require("telescope.builtin").find_files({
 		prompt_title = "<VimRc >",
@@ -293,3 +291,4 @@ vim.keymap.set("n", "<leader>sh", require("telescope.builtin").help_tags, { desc
 vim.keymap.set("n", "<leader>sw", require("telescope.builtin").grep_string, { desc = "[S]earch current [W]ord" })
 vim.keymap.set("n", "<leader>ff", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
 vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
+vim.keymap.set("n", "<c-b>", require("telescope.builtin").buffers, { desc = "[S]earch [B]uffers" })

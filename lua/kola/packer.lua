@@ -11,6 +11,14 @@ require("packer").startup(function(use)
 	-- Package manager
 	use("wbthomason/packer.nvim")
 
+	use({
+		"mcchrish/zenbones.nvim",
+		-- Optionally install Lush. Allows for more configuration or extending the colorscheme
+		-- If you don't want to install lush, make sure to set g:zenbones_compat = 1
+		-- In Vim, compat mode is turned on as Lush only works in Neovim.
+		requires = "rktjmp/lush.nvim",
+	})
+
 	use({ -- LSP Configuration & Plugins
 		"neovim/nvim-lspconfig",
 		requires = {
@@ -40,10 +48,16 @@ require("packer").startup(function(use)
 		after = "nvim-treesitter",
 	})
 
+	use({ -- Additional text objects via treesitter
+		"nvim-treesitter/playground",
+		after = "nvim-treesitter",
+	})
+
 	-- Git related plugins
 	use("tpope/vim-fugitive")
 	use("tpope/vim-rhubarb")
-	use("lewis6991/gitsigns.nvim")
+	use("lewis6991/gitsigns.nvim") -- Packer:
+	use("Mofiqul/vscode.nvim")
 
 	use("navarasu/onedark.nvim") -- Theme inspired by Atom
 	use("nvim-lualine/lualine.nvim") -- Fancier statusline

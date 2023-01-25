@@ -13,6 +13,15 @@ require("formatter").setup({
 		lua = {
 			require("formatter.filetypes.lua").stylua,
 		},
+		typescript = {
+			require("formatter.filetypes.typescript").eslint_d,
+		},
+		typescriptreact = {
+			require("formatter.filetypes.typescript").eslint_d,
+		},
+		json = {
+			require("formatter.filetypes.json").prettier,
+		},
 	},
 })
 
