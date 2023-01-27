@@ -33,7 +33,23 @@ require("packer").startup(function(use)
 
 	use({ -- Autocompletion
 		"hrsh7th/nvim-cmp",
-		requires = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip", "hrsh7th/cmp-copilot" },
+		requires = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" },
+	})
+
+	use({
+		"zbirenbaum/copilot.lua",
+		cmd = "Copilot",
+		event = "InsertEnter",
+		config = function()
+			require("copilot").setup({})
+		end,
+	})
+	use({
+		"zbirenbaum/copilot-cmp",
+		after = { "copilot.lua" },
+		config = function()
+			require("copilot_cmp").setup()
+		end,
 	})
 
 	use({ -- Highlight, edit, and navigate code
@@ -79,9 +95,6 @@ require("packer").startup(function(use)
 		tag = "nightly", -- optional, updated every week. (see issue #1193)
 	})
 	use({ "akinsho/toggleterm.nvim" })
-	use({
-		"github/copilot.vim",
-	})
 
 	-- Packer
 	use({ "sindrets/diffview.nvim", requires = "nvim-lua/plenary.nvim" })

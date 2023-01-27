@@ -42,6 +42,9 @@ require("formatter").setup({
 		typescript = {
 			eslint,
 		},
+		javascript = {
+			eslint,
+		},
 		typescriptreact = {
 			eslint,
 		},
