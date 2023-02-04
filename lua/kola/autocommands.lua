@@ -26,3 +26,20 @@ vim.api.nvim_create_autocmd("FileType", {
 	pattern = "fugitiveblame",
 	command = "nnoremap <buffer><silent> q <cmd>q<cr>",
 })
+
+local job = nill
+
+vim.api.nvim_create_user_command("StartLiveServer", function(opts)
+	-- start live server
+	job = vim.fn.jobstart("live-server " .. opts.args, {
+		on_stdout = function(_, data) end,
+	})
+	print("Live server started")
+end, {
+	nargs = 1,
+})
+
+vim.api.nvim_create_user_command("StopLiveServer", function(opts)
+	vim.fn.jobstop(job)
+	print("Live server stopped")
+end, {})
