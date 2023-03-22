@@ -32,7 +32,9 @@ local job = nill
 vim.api.nvim_create_user_command("StartLiveServer", function(opts)
 	-- start live server
 	job = vim.fn.jobstart("live-server " .. opts.args, {
-		on_stdout = function(_, data) end,
+		on_stdout = function(_, data)
+			P(data[1])
+		end,
 	})
 	print("Live server started")
 end, {
@@ -43,3 +45,5 @@ vim.api.nvim_create_user_command("StopLiveServer", function(opts)
 	vim.fn.jobstop(job)
 	print("Live server stopped")
 end, {})
+
+vim.cmd("au TermOpen * setlocal nospell")

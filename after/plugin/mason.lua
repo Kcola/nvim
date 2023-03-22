@@ -49,7 +49,7 @@ local on_attach = function(_, bufnr)
 	nmap("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
 	nmap("<leader>qf", vim.lsp.buf.code_action, "[C]ode [A]ction")
 
-	nmap("gd", vim.lsp.buf.definition, "[G]oto [D]efinition")
+	nmap("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
 	nmap("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
 	nmap("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")
 	nmap("<leader>D", vim.lsp.buf.type_definition, "Type [D]efinition")
@@ -67,7 +67,7 @@ local on_attach = function(_, bufnr)
 		print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
 	end, "[W]orkspace [L]ist Folders")
 
-	register_autocommands()
+	--register_autocommands()
 end
 
 -- Diagnostics UI
@@ -95,7 +95,7 @@ end
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { "tsserver", "sumneko_lua", "omnisharp", "eslint" }
+local servers = { "tsserver", "lua_ls", "omnisharp", "eslint", "ltex" }
 
 -- Ensure the servers above are installed
 require("mason-lspconfig").setup({
@@ -123,7 +123,7 @@ local runtime_path = vim.split(package.path, ";")
 table.insert(runtime_path, "lua/?.lua")
 table.insert(runtime_path, "lua/?/init.lua")
 
-require("lspconfig").sumneko_lua.setup({
+require("lspconfig").lua_ls.setup({
 	on_attach = on_attach,
 	capabilities = capabilities,
 	settings = {
@@ -140,6 +140,23 @@ require("lspconfig").sumneko_lua.setup({
 			workspace = { library = vim.api.nvim_get_runtime_file("", true) },
 			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = { enable = false },
+		},
+	},
+})
+
+local words = {}
+for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):lines() do
+	table.insert(words, word)
+end
+
+require("lspconfig").ltex.setup({
+	on_attach = on_attach,
+	capabilities = capabilities,
+	settings = {
+		ltex = {
+			dictionary = {
+				["en-US"] = words,
+			},
 		},
 	},
 })

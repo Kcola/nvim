@@ -3,6 +3,7 @@ local opts = { noremap = true, silent = true }
 local actions = require("diffview.actions")
 local lazy = require("diffview.lazy")
 local lib = lazy.require("diffview.lib")
+local gs = require("gitsigns")
 
 local goto_file = function()
 	actions.goto_file()
@@ -32,11 +33,14 @@ end
 require("diffview").setup({
 	key_bindings = {
 		file_panel = {
-			["<c-d>"] = load_files_into_buffer,
 			s = actions.toggle_stage_entry,
-			o = goto_file,
 			["<cr>"] = goto_file_and_close,
 			["cc"] = "<Cmd>botright Git commit<CR>",
+			["<2-LeftMouse>"] = actions.select_entry,
+		},
+		diff_view = {
+			["<Down>"] = gs.next_hunk,
+			["<Up>"] = gs.prev_hunk,
 		},
 	},
 })

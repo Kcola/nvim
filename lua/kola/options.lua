@@ -36,6 +36,7 @@ vim.opt.numberwidth = 4 -- set number column width to 2 {default 4}
 vim.opt.wrap = false -- display lines as one long line
 vim.opt.scrolloff = 8 -- is one of my fav
 vim.opt.termguicolors = true
+vim.opt.spelloptions = "camel"
 vim.opt.sidescrolloff = 8
 vim.opt.incsearch = true
 vim.opt.guifont = "monospace:h17" -- shell
