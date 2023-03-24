@@ -12,8 +12,10 @@ local powershell_options = {
 	shellxquote = "",
 }
 
-for option, value in pairs(powershell_options) do
-	vim.opt[option] = value
+if IS_WINDOWS then
+	for option, value in pairs(powershell_options) do
+		vim.opt[option] = value
+	end
 end
 
 local vertical_width = vim.o.columns * 0.35

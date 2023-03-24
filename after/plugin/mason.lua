@@ -95,7 +95,7 @@ end
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { "tsserver", "lua_ls", "omnisharp", "eslint", "ltex" }
+local servers = { "tsserver", "omnisharp", "eslint", "ltex" }
 
 -- Ensure the servers above are installed
 require("mason-lspconfig").setup({
@@ -140,23 +140,6 @@ require("lspconfig").lua_ls.setup({
 			workspace = { library = vim.api.nvim_get_runtime_file("", true) },
 			-- Do not send telemetry data containing a randomized but unique identifier
 			telemetry = { enable = false },
-		},
-	},
-})
-
-local words = {}
-for word in io.open(vim.fn.stdpath("config") .. "/spell/en.utf-8.add", "r"):lines() do
-	table.insert(words, word)
-end
-
-require("lspconfig").ltex.setup({
-	on_attach = on_attach,
-	capabilities = capabilities,
-	settings = {
-		ltex = {
-			dictionary = {
-				["en-US"] = words,
-			},
 		},
 	},
 })
