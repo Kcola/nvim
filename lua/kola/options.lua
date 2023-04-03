@@ -3,7 +3,6 @@ vim.o.undofile = true
 vim.o.updatetime = 250
 vim.wo.signcolumn = "yes"
 vim.o.termguicolors = true
-vim.cmd([[colorscheme vscode]])
 vim.cmd([[set autoread]])
 vim.o.completeopt = "menuone,noselect"
 vim.opt.backup = false -- creates a backup file
