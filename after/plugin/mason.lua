@@ -14,17 +14,6 @@ vim.api.nvim_create_augroup("lsp_autocommands", {
     clear = false,
 })
 
-local register_autocommands = function()
-    -- diagnostics hover autocommand
-    vim.api.nvim_create_autocmd({ "CursorHold", "CursorHoldI" }, {
-        group = "lsp_autocommands",
-        buffer = bufnr,
-        callback = function()
-            vim.diagnostic.open_float(nil, { focus = false })
-        end,
-    })
-end
-
 -- Setup mason so it can manage external tooling
 require("mason").setup()
 
@@ -312,10 +301,10 @@ end
 
 -- Diagnostic keymaps
 vim.keymap.set("n", "[g", function()
-    vim.diagnostic.goto_prev()
+    vim.diagnostic.goto_prev({ float = false })
 end)
 vim.keymap.set("n", "]g", function()
-    vim.diagnostic.goto_next()
+    vim.diagnostic.goto_next({ float = false })
 end)
 vim.keymap.set("n", "<leader>e", vim.diagnostic.open_float)
 vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist)

@@ -8,7 +8,10 @@ require("lualine").setup({
     tabline = {
         lualine_a = {
             function()
-                return vim.fn.expand("%:p")
+                local path = vim.fn.expand("%:p")
+                --replace home directory with ~
+                path = path:gsub(vim.env.HOME, "~")
+                return path
             end,
         },
         lualine_b = {},
