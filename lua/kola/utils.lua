@@ -159,4 +159,14 @@ local function get_result()
     return result
 end
 
-return { get_package_root = get_package_root, get_jest_nearest_test = get_result }
+local function get_git_repo_name()
+    local url = vim.fn.system("git remote get-url origin")
+
+    -- split url by / and get the last element
+    local split_url = vim.split(url, "/")
+    local repo_name = split_url[#split_url]:gsub("%s+", "")
+
+    return repo_name
+end
+
+return { get_package_root = get_package_root, get_jest_nearest_test = get_result, get_git_repo_name = get_git_repo_name }
