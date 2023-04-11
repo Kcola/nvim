@@ -4,6 +4,7 @@ local conf = require("telescope.config").values
 local actions = require("telescope.actions")
 local action_state = require("telescope.actions.state")
 local utils = require("telescope.utils")
+local nvim_lsp = require("lspconfig")
 
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded", width = 100 })
 
@@ -84,7 +85,7 @@ end
 
 -- Enable the following language servers
 -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-local servers = { "tsserver", "omnisharp", "eslint", "ltex" }
+local servers = { "tsserver", "omnisharp", "eslint", "ltex", "denols" }
 
 -- Ensure the servers above are installed
 require("mason-lspconfig").setup({
@@ -130,6 +131,24 @@ require("lspconfig").lua_ls.setup({
             -- Do not send telemetry data containing a randomized but unique identifier
             telemetry = { enable = false },
         },
+    },
+})
+nvim_lsp.denols.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    root_dir = nvim_lsp.util.root_pattern("deno.json"),
+    init_options = {
+        lint = true,
+    },
+})
+
+nvim_lsp.tsserver.setup({
+    on_attach = on_attach,
+    capabilities = capabilities,
+    root_dir = nvim_lsp.util.root_pattern("package.json"),
+    single_file_support = false,
+    init_options = {
+        lint = true,
     },
 })
 

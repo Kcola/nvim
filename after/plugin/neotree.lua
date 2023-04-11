@@ -12,14 +12,8 @@ require("neo-tree").setup({
         },
     },
     nesting_rules = {},
-    filesystem = {
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
-    },
-    buffers = {
-        follow_current_file = true, -- This will find and focus the file in the active buffer every
-    },
 })
 
 vim.keymap.set("n", "<leader>t", function()
-    vim.cmd([[Neotree toggle]])
+    vim.cmd([[Neotree toggle reveal]])
 end, { desc = "toggle tree" })
