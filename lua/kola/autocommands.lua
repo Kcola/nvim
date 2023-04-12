@@ -1,3 +1,4 @@
+local utils = require("kola.utils")
 local function view_commit()
     local line = vim.fn.getline(".")
     vim.cmd("DiffviewOpen " .. line:firstword() .. "^!")
@@ -27,7 +28,7 @@ vim.api.nvim_create_autocmd("FileType", {
     command = "nnoremap <buffer><silent> q <cmd>q<cr>",
 })
 
-local job = nill
+local job = nil
 
 vim.api.nvim_create_user_command("StartLiveServer", function(opts)
     -- start live server
@@ -41,9 +42,11 @@ end, {
     nargs = 1,
 })
 
-vim.api.nvim_create_user_command("StopLiveServer", function(opts)
+vim.api.nvim_create_user_command("StopLiveServer", function()
     vim.fn.jobstop(job)
     print("Live server stopped")
 end, {})
 
-vim.cmd("au TermOpen * setlocal nospell")
+vim.api.nvim_create_user_command("Jest", function()
+    print(utils.get_jest_nearest_test())
+end, {})

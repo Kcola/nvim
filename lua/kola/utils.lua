@@ -169,4 +169,15 @@ local function get_git_repo_name()
     return repo_name
 end
 
-return { get_package_root = get_package_root, get_jest_nearest_test = get_result, get_git_repo_name = get_git_repo_name }
+-- convert windows path to unix path
+local function convert_windows_path(path)
+    local converted_path = path:gsub("\\", "/")
+    return converted_path
+end
+
+return {
+    get_package_root = get_package_root,
+    get_jest_nearest_test = get_result,
+    get_git_repo_name = get_git_repo_name,
+    convert_windows_path = convert_windows_path,
+}

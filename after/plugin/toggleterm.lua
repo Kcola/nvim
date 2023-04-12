@@ -22,6 +22,7 @@ local vertical_width = vim.o.columns * 0.35
 
 local get_package_root = require("kola.utils").get_package_root
 local get_jest_nearest_test = require("kola.utils").get_jest_nearest_test
+local convert_windows_path = require("kola.utils").convert_windows_path
 
 toggleterm.setup({
     size = function(term)
@@ -91,14 +92,21 @@ local function vert_test()
 
     vert:change_dir(package_root)
 
-    vert:send(
-        (config.jest or "node --inspect (npm root)/jest/bin/jest.js -- -t '")
-            .. jest_nearest_test
-            .. "' -- "
-            .. current_buffer
-    )
-    require("dap").terminate()
-    require("kola.dap.node").attach()
+    if IS_WINDOWS then
+        vert:send(
+            (config.jest or 'node "$(npm root)/jest/bin/jest.js" -t \'')
+                .. jest_nearest_test
+                .. "' "
+                .. convert_windows_path(current_buffer)
+        )
+    else
+        vert:send(
+            (config.jest or "node (npm root)/jest/bin/jest.js -- -t '")
+                .. jest_nearest_test
+                .. "' -- "
+                .. current_buffer
+        )
+    end
 end
 
 local function vert_e2e_test()

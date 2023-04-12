@@ -2,7 +2,9 @@ local utils = require("kola.utils")
 local lsp = require("lspconfig")
 local formattingUtils = require("formatter.util")
 
-if utils.get_git_repo_name() == "power-platform-ux" then
+local projectName = utils.get_git_repo_name()
+
+if projectName == "power-platform-ux" then
     local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
     lsp.eslint.setup({
         settings = {
