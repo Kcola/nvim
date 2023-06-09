@@ -271,7 +271,7 @@ pcall(require("telescope").load_extension, "fzf")
 local search_vim_config = function()
     require("telescope.builtin").find_files({
         prompt_title = "<VimRc >",
-        cwd = IS_WINDOWS and "C:\\Users\\" .. os.getenv("USERNAME") .. "\\dotfiles\\.config\\" or "~/.config",
+        cwd = IS_WINDOWS and os.getenv("HOMEPATH") .. "\\dotfiles\\.config\\" or "~/.config",
         path_display = { "truncate" },
     })
 end

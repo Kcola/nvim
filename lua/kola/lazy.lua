@@ -57,7 +57,11 @@ require("lazy").setup({
         tag = "nightly", -- optional, updated every week. (see issue #1193)
     },
     "akinsho/toggleterm.nvim",
-    { "sindrets/diffview.nvim", dependencies = "nvim-lua/plenary.nvim" },
+    {
+        "sindrets/diffview.nvim",
+        dependencies = "nvim-lua/plenary.nvim",
+        commit = "4a55b5e2d2c3d6bd89cd3299a9ca276d49d25463",
+    },
     "mhartington/formatter.nvim",
     {
         "nvim-neo-tree/neo-tree.nvim",
