@@ -17,7 +17,7 @@ require("lazy").setup({
     "neovim/nvim-lspconfig",
     "williamboman/mason.nvim",
     "williamboman/mason-lspconfig.nvim",
-    "j-hui/fidget.nvim",
+    { "j-hui/fidget.nvim", tag = "legacy" },
     { "hrsh7th/nvim-cmp", dependencies = { "hrsh7th/cmp-nvim-lsp", "L3MON4D3/LuaSnip", "saadparwaiz1/cmp_luasnip" } },
     { -- Highlight, edit, and navigate code
         "nvim-treesitter/nvim-treesitter",
@@ -57,7 +57,11 @@ require("lazy").setup({
         tag = "nightly", -- optional, updated every week. (see issue #1193)
     },
     "akinsho/toggleterm.nvim",
-    { "sindrets/diffview.nvim", dependencies = "nvim-lua/plenary.nvim" },
+    {
+        "sindrets/diffview.nvim",
+        dependencies = "nvim-lua/plenary.nvim",
+        commit = "4a55b5e2d2c3d6bd89cd3299a9ca276d49d25463",
+    },
     "mhartington/formatter.nvim",
     {
         "nvim-neo-tree/neo-tree.nvim",
