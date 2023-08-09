@@ -60,19 +60,13 @@ require("lazy").setup({
     {
         "sindrets/diffview.nvim",
         dependencies = "nvim-lua/plenary.nvim",
-        commit = "4a55b5e2d2c3d6bd89cd3299a9ca276d49d25463",
     },
     "mhartington/formatter.nvim",
+    --lazy
     {
-        "nvim-neo-tree/neo-tree.nvim",
-        branch = "v2.x",
-        dependencies = {
-            "nvim-lua/plenary.nvim",
-            "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
-            "MunifTanjim/nui.nvim",
-        },
+        "nvim-telescope/telescope-file-browser.nvim",
+        dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
     },
-
     {
         "rmagatti/auto-session",
         config = function()
