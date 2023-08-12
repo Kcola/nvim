@@ -7,6 +7,7 @@ require("telescope").setup({
         file_browser = {
             hijack_netrw = true,
             initial_mode = "normal",
+            file_ignore_patterns = {},
             previewer = false,
             layout_strategy = "vertical",
             layout_config = { prompt_position = "top", width = 0.5, height = 0.5 },

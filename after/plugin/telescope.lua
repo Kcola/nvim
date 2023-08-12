@@ -28,7 +28,6 @@ local delete_branch = function(prompt_bufnr)
     local confirmation = vim.fn.confirm("Delete " .. selection.name, "&Yes\n&No")
     if confirmation == 1 then
         vim.cmd("G branch -D " .. selection.value)
-        require("kola.telescope.custom_builtins").git_branches()
     end
 end
 
@@ -194,7 +193,6 @@ end
 require("telescope").setup({
     defaults = {
         path_display = { "truncate" },
-        file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
         prompt_prefix = " >",
         color_devicons = true,
         mappings = {
@@ -207,9 +205,11 @@ require("telescope").setup({
     pickers = {
         find_files = {
             hidden = true,
+            file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
         },
         live_grep = {
             search_dirs = config,
+            file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
             additional_args = function() end,
             mappings = {
                 i = {
@@ -242,6 +242,7 @@ require("telescope").setup({
         },
         grep_string = {
             hidden = true,
+            file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
             search_dirs = config,
         },
         git_branches = {
