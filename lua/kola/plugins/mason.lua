@@ -2,6 +2,7 @@ return {
     "williamboman/mason.nvim",
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
+        "jmederosalvarado/roslyn.nvim",
     },
     config = function()
         local pickers = require("telescope.pickers")
@@ -92,7 +93,7 @@ return {
 
         -- Enable the following language servers
         -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-        local servers = { "tsserver", "omnisharp", "eslint", "ltex", "denols" }
+        local servers = { "tsserver", "eslint", "ltex", "denols" }
 
         -- Ensure the servers above are installed
         require("mason-lspconfig").setup({
@@ -140,6 +141,14 @@ return {
                 },
             },
         })
+
+        require("roslyn").setup({
+            dotnet_cmd = "dotnet", -- this is the default
+            roslyn_version = "4.8.0-3.23475.7", -- this is the default
+            on_attach = on_attach, -- required
+            capabilities = capabilities, -- required
+        })
+
         nvim_lsp.denols.setup({
             on_attach = on_attach,
             capabilities = capabilities,

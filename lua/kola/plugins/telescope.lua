@@ -1,6 +1,5 @@
 return {
     "nvim-telescope/telescope.nvim",
-    commit = "776b509f80dd49d8205b9b0d94485568236d1192",
     dependencies = { "nvim-lua/plenary.nvim" },
     config = function()
         local pickers = require("telescope.pickers")
@@ -13,8 +12,6 @@ return {
         local finders = require("telescope.finders")
         local action_state = require("telescope.actions.state")
         local fb_actions = require("telescope").extensions.file_browser.actions
-
-        require("telescope").load_extension("file_browser")
 
         local checkout = function(prompt_bufnr)
             local selection = action_state.get_selected_entry()
@@ -31,15 +28,13 @@ return {
             vim.cmd("G checkout " .. branch)
         end
 
-        local delete_branch = function(prompt_bufnr)
+        local delete_branch = function()
             local selection = action_state.get_selected_entry()
             local confirmation = vim.fn.confirm("Delete " .. selection.name, "&Yes\n&No")
             if confirmation == 1 then
                 vim.cmd("G branch -D " .. selection.value)
             end
         end
-
-        local M = {}
 
         local git_branches = function()
             local format = "%(HEAD)"
@@ -301,6 +296,8 @@ return {
                 },
             },
         })
+
+        require("telescope").load_extension("file_browser")
 
         pcall(require("telescope").load_extension, "fzf")
 

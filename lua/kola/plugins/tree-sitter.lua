@@ -4,6 +4,8 @@ return { -- Highlight, edit, and navigate code
         require("nvim-treesitter.configs").setup({
             -- Add languages to be installed here that you want installed for treesitter
             ensure_installed = { "lua", "typescript", "c_sharp", "javascript", "json" },
+            sync_install = true,
+            build = ":TSUpdate",
 
             indent = { enable = true },
             incremental_selection = {
