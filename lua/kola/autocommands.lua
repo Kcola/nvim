@@ -4,6 +4,28 @@ local function view_commit()
     vim.cmd("DiffviewOpen " .. line:firstword() .. "^!")
 end
 
+vim.api.nvim_create_user_command("DeleteQuickFixListEntries", function()
+    vim.diagnostic.setqflist({ open = false })
+    local qflist = vim.fn.getqflist()
+
+    -- delete all buffer lines that are in the quickfix list
+    -- and adjust the buffer line numbers as we go
+    for i = #vim.api.nvim_buf_get_lines(0, 0, -1, false), 1, -1 do
+        if
+            vim.tbl_contains(
+                vim.tbl_map(function(item)
+                    return item.lnum
+                end, qflist),
+                i
+            )
+        then
+            vim.api.nvim_buf_set_lines(0, i - 1, i, false, {})
+        end
+    end
+end, {
+    nargs = 0,
+})
+
 vim.api.nvim_create_autocmd("FileType", {
     pattern = "git",
     callback = function()

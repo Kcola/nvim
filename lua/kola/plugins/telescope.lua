@@ -202,6 +202,7 @@ return {
         require("telescope").setup({
 
             defaults = {
+                file_sorter = require("telescope.sorters").get_fzy_sorter,
                 path_display = { "truncate" },
                 prompt_prefix = " >",
                 color_devicons = true,
@@ -235,7 +236,6 @@ return {
                         "--line-number",
                         "--column",
                         "--smart-case",
-                        "--hidden",
                     },
                 },
                 buffers = {
@@ -250,7 +250,6 @@ return {
                     },
                 },
                 grep_string = {
-                    hidden = true,
                     file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
                     search_dirs = config,
                 },

@@ -1,6 +1,6 @@
 return {
     "sindrets/diffview.nvim",
-    dependencies = "nvim-lua/plenary.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "lewis6991/gitsigns.nvim" },
     keys = { "gs" },
     config = function()
         -- Lua
