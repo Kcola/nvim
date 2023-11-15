@@ -16,6 +16,8 @@ vim.keymap.set("i", "?", "?<C-g>u", opts)
 
 -- Navigation
 vim.keymap.set("n", "H", ":bp<CR>", opts)
+vim.keymap.set("n", "<Tab>", ":bnext<CR>", opts)
+vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", opts)
 vim.keymap.set("n", "<C-j>", "<C-W><Down>", opts)
 vim.keymap.set("n", "<C-h>", "<C-W><Left>", opts)
 vim.keymap.set("n", "<C-k>", "<C-W><Up>", opts)
