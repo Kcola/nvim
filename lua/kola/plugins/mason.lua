@@ -2,7 +2,7 @@ return {
     "williamboman/mason.nvim",
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
-        "jmederosalvarado/roslyn.nvim",
+        "pmizio/typescript-tools.nvim",
     },
     config = function()
         local pickers = require("telescope.pickers")
@@ -93,7 +93,7 @@ return {
 
         -- Enable the following language servers
         -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-        local servers = { "tsserver", "eslint", "ltex", "denols", "pyright" }
+        local servers = { "eslint", "ltex", "denols", "pyright" }
 
         -- Ensure the servers above are installed
         require("mason-lspconfig").setup({
@@ -110,6 +110,10 @@ return {
                 capabilities = capabilities,
             })
         end
+
+        require("typescript-tools").setup({
+            on_attach = on_attach,
+        })
 
         -- Turn on lsp status information
         require("fidget").setup()
@@ -142,27 +146,10 @@ return {
             },
         })
 
-        require("roslyn").setup({
-            dotnet_cmd = "dotnet", -- this is the default
-            roslyn_version = "4.8.0-3.23475.7", -- this is the default
-            on_attach = on_attach, -- required
-            capabilities = capabilities, -- required
-        })
-
         nvim_lsp.denols.setup({
             on_attach = on_attach,
             capabilities = capabilities,
             root_dir = nvim_lsp.util.root_pattern("deno.json"),
-            init_options = {
-                lint = true,
-            },
-        })
-
-        nvim_lsp.tsserver.setup({
-            on_attach = on_attach,
-            capabilities = capabilities,
-            root_dir = nvim_lsp.util.root_pattern("package.json"),
-            single_file_support = false,
             init_options = {
                 lint = true,
             },
