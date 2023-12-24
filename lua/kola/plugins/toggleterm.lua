@@ -83,49 +83,6 @@ return {
             vert:toggle(vertical_width)
         end
 
-        local function vert_test()
-            local custom_jest_command = nil
-            if PROJECT_NAME == "power-platform-ux" then
-                if IS_WINDOWS then
-                    custom_jest_command = 'node "'
-                        .. vim.fn.finddir("packages", ";")
-                        .. "/build-scripts/node_modules/jest/bin/jest.js"
-                        .. "\" --runInBand -t '"
-                else
-                    custom_jest_command = "node "
-                        .. vim.fn.finddir("packages", ";")
-                        .. "/build-scripts/node_modules/jest/bin/jest.js"
-                        .. " --runInBand -t '"
-                end
-            end
-
-            local current_buffer = vim.fn.expand("%:p")
-            local jest_nearest_test = get_jest_nearest_test()
-            local package_root = get_package_root()
-
-            if not jest_nearest_test then
-                return
-            end
-
-            vert:change_dir(package_root)
-
-            if IS_WINDOWS then
-                vert:send(
-                    (custom_jest_command or 'node "$(npm root)/jest/bin/jest.js" -t \'')
-                        .. jest_nearest_test
-                        .. "' "
-                        .. convert_windows_path(current_buffer)
-                )
-            else
-                vert:send(
-                    (custom_jest_command or "node (npm root)/jest/bin/jest.js -- -t '")
-                        .. jest_nearest_test
-                        .. "' -- "
-                        .. current_buffer
-                )
-            end
-        end
-
         local function vert_e2e_test()
             local config = CONFIG
             vert:send("cd " .. get_package_root())
@@ -143,7 +100,6 @@ return {
         end
 
         vim.keymap.set("n", "<F12>", vert_toggle)
-        vim.keymap.set("n", "<leader>J", vert_test)
         vim.keymap.set("n", "<leader>E2E", vert_e2e_test)
 
         local function set_terminal_keymaps()
