@@ -38,6 +38,8 @@ vim.keymap.set("n", "<leader>q", function()
         vim.cmd("tabclose")
     end
 end)
+vim.keymap.set("n", "Q", "@qj", opts)
+vim.keymap.set("v", "Q", ":norm @q<CR>", opts)
 
 -- Resize with arrows
 vim.keymap.set("n", "<C-Up>", ":resize -2<CR>", opts)
