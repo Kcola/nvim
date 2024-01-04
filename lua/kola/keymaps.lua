@@ -32,10 +32,13 @@ vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("n", "N", "Nzzzv", opts)
 vim.keymap.set("n", "H", ":bp<CR>", opts)
 vim.keymap.set("n", "<C-W>", ":%bd!|e#<CR>", opts)
-vim.keymap.set("n", "<leader>q", function()
+vim.keymap.set("n", "q", function()
     local tabNumber = vim.fn.tabpagenr()
     if tabNumber > 1 then
         vim.cmd("tabclose")
+    else
+        local key = vim.api.nvim_replace_termcodes("q", true, false, true)
+        vim.api.nvim_feedkeys(key, "n", false)
     end
 end)
 vim.keymap.set("n", "Q", "@qj", opts)

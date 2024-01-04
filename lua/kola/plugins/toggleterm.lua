@@ -24,8 +24,6 @@ return {
         local vertical_width = vim.o.columns * 0.35
 
         local get_package_root = require("kola.utils").get_package_root
-        local get_jest_nearest_test = require("kola.utils").get_jest_nearest_test
-        local convert_windows_path = require("kola.utils").convert_windows_path
 
         toggleterm.setup({
             size = function(term)
@@ -79,6 +77,18 @@ return {
             callback = try_close_vert,
         })
 
+        local function jest()
+            local packageRoot = get_package_root()
+            local current_buffer = vim.fn.expand("%:p")
+            vert:send(
+                "node '"
+                    .. vim.fs.normalize(packageRoot)
+                    .. vim.fs.normalize("/node_modules/jest/bin/jest.js")
+                    .. "' "
+                    .. vim.fs.normalize(current_buffer)
+            )
+        end
+
         local function vert_toggle()
             vert:toggle(vertical_width)
         end
@@ -100,6 +110,7 @@ return {
         end
 
         vim.keymap.set("n", "<F12>", vert_toggle)
+        vim.keymap.set("n", "J", jest)
         vim.keymap.set("n", "<leader>E2E", vert_e2e_test)
 
         local function set_terminal_keymaps()

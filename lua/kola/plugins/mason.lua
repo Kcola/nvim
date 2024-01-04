@@ -2,7 +2,6 @@ return {
     "williamboman/mason.nvim",
     dependencies = {
         "williamboman/mason-lspconfig.nvim",
-        "pmizio/typescript-tools.nvim",
     },
     config = function()
         local pickers = require("telescope.pickers")
@@ -93,7 +92,7 @@ return {
 
         -- Enable the following language servers
         -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-        local servers = { "eslint", "ltex", "denols", "pyright" }
+        local servers = { "eslint", "ltex", "denols", "pyright", "tsserver", "lua_ls" }
 
         -- Ensure the servers above are installed
         require("mason-lspconfig").setup({
@@ -110,10 +109,6 @@ return {
                 capabilities = capabilities,
             })
         end
-
-        require("typescript-tools").setup({
-            on_attach = on_attach,
-        })
 
         -- Turn on lsp status information
         require("fidget").setup()
