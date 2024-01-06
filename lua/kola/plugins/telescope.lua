@@ -216,6 +216,7 @@ return {
             pickers = {
                 find_files = {
                     file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
+                    hidden = true,
                 },
                 live_grep = {
                     search_dirs = config,
@@ -326,7 +327,6 @@ return {
             }))
         end, { desc = "[/] Fuzzily search in current buffer]" })
 
-        vim.keymap.set("n", "<c-p>", require("telescope.builtin").find_files, { desc = "[S]earch [F]iles" })
         vim.keymap.set("n", "<leader>sh", require("telescope.builtin").help_tags, { desc = "[S]earch [H]elp" })
         vim.keymap.set(
             "n",
@@ -344,4 +344,8 @@ return {
             { noremap = true }
         )
     end,
+    keys = { {
+        "<c-p>",
+        ":lua require('telescope.builtin').find_files()<CR>",
+    } },
 }

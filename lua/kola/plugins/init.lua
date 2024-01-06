@@ -1,4 +1,10 @@
 return {
+    { "sitiom/nvim-numbertoggle" },
+    {
+        "m4xshen/hardtime.nvim",
+        depnndencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
+        opts = {},
+    },
     "github/copilot.vim",
     "neovim/nvim-lspconfig",
     { "j-hui/fidget.nvim", tag = "legacy" },
