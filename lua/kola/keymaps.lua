@@ -13,6 +13,7 @@ vim.keymap.set("i", ",", ",<C-g>u", opts)
 vim.keymap.set("i", ".", ".<C-g>u", opts)
 vim.keymap.set("i", "!", "!<C-g>u", opts)
 vim.keymap.set("i", "?", "?<C-g>u", opts)
+vim.keymap.set("v", "<leader>p", '"_dP', opts)
 
 -- Navigation
 vim.keymap.set("n", "H", ":bp<CR>", opts)
