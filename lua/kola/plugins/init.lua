@@ -3,7 +3,10 @@ return {
     {
         "m4xshen/hardtime.nvim",
         depnndencies = { "MunifTanjim/nui.nvim", "nvim-lua/plenary.nvim" },
-        opts = {},
+        opts = {
+            restriction_mode = "hint",
+            disable_mouse = false,
+        },
     },
     "github/copilot.vim",
     "neovim/nvim-lspconfig",

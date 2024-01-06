@@ -28,13 +28,6 @@ return {
         -- LSP settings.
         --  This function gets run when an LSP connects to a particular buffer.
         local on_attach = function(_, bufnr)
-            -- NOTE: Remember that lua is a real programming language, and as such it is possible
-            -- to define small helper and utility functions so you don't have to repeat yourself
-            -- many times.
-            --
-            -- In this case, we create a function that lets us more easily define mappings specific
-            -- for LSP related items. It sets the mode, buffer and description for us each time.
-
             local nmap = function(keys, func, desc)
                 if desc then
                     desc = "LSP: " .. desc
@@ -63,8 +56,6 @@ return {
             nmap("<leader>wl", function()
                 print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
             end, "[W]orkspace [L]ist Folders")
-
-            --register_autocommands()
         end
 
         -- Diagnostics UI
@@ -104,7 +95,7 @@ return {
         capabilities = require("cmp_nvim_lsp").default_capabilities(capabilities)
 
         for _, lsp in ipairs(servers) do
-            require("lspconfig")[lsp].setup({
+            nvim_lsp[lsp].setup({
                 on_attach = on_attach,
                 capabilities = capabilities,
             })
@@ -120,7 +111,7 @@ return {
         table.insert(runtime_path, "lua/?.lua")
         table.insert(runtime_path, "lua/?/init.lua")
 
-        require("lspconfig").lua_ls.setup({
+        nvim_lsp.lua_ls.setup({
             on_attach = on_attach,
             capabilities = capabilities,
             settings = {
@@ -244,7 +235,6 @@ return {
 
             for _, item in ipairs(_items) do
                 local low_priority = string.find(string.lower((item[2] or {}).title or "") or "", "disable")
-                    and item[2].command == "NULL_LS_CODE_ACTION"
 
                 if low_priority then
                     table.insert(low_priority_items, item)
