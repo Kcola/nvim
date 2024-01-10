@@ -8,7 +8,6 @@ return {
             disable_mouse = false,
         },
     },
-    "github/copilot.vim",
     "neovim/nvim-lspconfig",
     { "j-hui/fidget.nvim", tag = "legacy" },
     {
