@@ -7,6 +7,8 @@ return {
     config = function()
         -- Enable Comment.nvim
         require("Comment").setup()
+        local ft = require("Comment.ft")
+        ft.set("json", "//%s")
 
         -- Enable `lukas-reineke/indent-blankline.nvim`
         -- See `:help indent_blankline.txt`
@@ -52,7 +54,7 @@ return {
                     eslint,
                 },
                 javascript = {
-                    eslint,
+                    require("formatter.filetypes.json").prettier,
                 },
                 typescriptreact = {
                     eslint,

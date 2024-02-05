@@ -237,6 +237,7 @@ return {
                         "--line-number",
                         "--column",
                         "--smart-case",
+                        "--hidden",
                     },
                 },
                 buffers = {

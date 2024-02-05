@@ -84,7 +84,7 @@ return {
 
         -- Enable the following language servers
         -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-        local servers = { "eslint", "ltex", "denols", "pyright", "tsserver", "lua_ls" }
+        local servers = { "eslint", "denols", "pyright", "tsserver", "lua_ls" }
 
         -- Ensure the servers above are installed
         require("mason-lspconfig").setup({
