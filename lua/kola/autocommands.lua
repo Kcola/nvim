@@ -76,7 +76,7 @@ end, {})
 vim.api.nvim_create_user_command("FormatPrompt", function()
     local current_buffer = vim.api.nvim_get_current_buf()
     local prompt = table.concat(vim.api.nvim_buf_get_lines(current_buffer, 0, -1, false), "\n")
-    local escaped_prompt = prompt:gsub("\n", "\\n"):gsub("\t", "\\t")
+    local escaped_prompt = prompt:gsub("\n", "\\n"):gsub("\t", "\\t"):gsub('"', '\\"')
     vim.fn.setreg("+", escaped_prompt)
 end, {})
 
@@ -87,7 +87,7 @@ vim.api.nvim_create_user_command("FloatPrompt", function()
     vim.cmd(':normal! yi"')
     local lines = vim.fn.getreg('"')
 
-    local escaped_prompt = lines:gsub("\\n", "\n"):gsub("\\t", "\t")
+    local escaped_prompt = lines:gsub("\\n", "\n"):gsub("\\t", "\t"):gsub('\\"', '"')
     -- split the prompt into lines and set the buffer lines
     lines = vim.fn.split(escaped_prompt, "\n")
 
