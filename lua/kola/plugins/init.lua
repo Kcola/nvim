@@ -15,7 +15,6 @@ return {
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
     },
     "nvim-treesitter/nvim-treesitter-textobjects",
-    "nvim-treesitter/playground",
     "tpope/vim-fugitive",
     "tpope/vim-rhubarb",
     "tpope/vim-sleuth",
