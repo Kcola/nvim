@@ -109,7 +109,6 @@ return {
             vert:send(command)
         end
 
-        vim.keymap.set("n", "<F12>", vert_toggle)
         vim.keymap.set("n", "J", jest)
         vim.keymap.set("n", "<leader>E2E", vert_e2e_test)
 
