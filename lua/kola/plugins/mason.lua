@@ -84,7 +84,7 @@ return {
 
         -- Enable the following language servers
         -- Feel free to add/remove any LSPs that you want here. They will automatically be installed
-        local servers = { "eslint", "denols", "pyright", "tsserver", "lua_ls" }
+        local servers = { "eslint", "denols", "pyright", "tsserver", "lua_ls", "omnisharp" }
 
         -- Ensure the servers above are installed
         require("mason-lspconfig").setup({
@@ -151,7 +151,6 @@ return {
 
         -- nvim-cmp setup
         local cmp = require("cmp")
-        local luasnip = require("luasnip")
 
         local kind_icons = {
             Text = "",
@@ -181,11 +180,6 @@ return {
             TypeParameter = "",
         }
         cmp.setup({
-            snippet = {
-                expand = function(args)
-                    luasnip.lsp_expand(args.body)
-                end,
-            },
             mapping = cmp.mapping.preset.insert({
                 ["<C-d>"] = cmp.mapping.scroll_docs(-4),
                 ["<C-f>"] = cmp.mapping.scroll_docs(4),
@@ -197,8 +191,6 @@ return {
                 ["<Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_next_item()
-                    elseif luasnip.expand_or_jumpable() then
-                        luasnip.expand_or_jump()
                     else
                         fallback()
                     end
@@ -206,8 +198,6 @@ return {
                 ["<S-Tab>"] = cmp.mapping(function(fallback)
                     if cmp.visible() then
                         cmp.select_prev_item()
-                    elseif luasnip.jumpable(-1) then
-                        luasnip.jump(-1)
                     else
                         fallback()
                     end
