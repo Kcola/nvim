@@ -1,3 +1,4 @@
+local wezterm = require("kola.wezterm")
 local opts = { noremap = true, silent = true }
 
 -- Keymaps for better default experience
@@ -20,10 +21,10 @@ vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 -- Navigation
 vim.keymap.set("n", "<Tab>", ":bnext<CR>", opts)
 vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", opts)
-vim.keymap.set("n", "<C-j>", "<C-W><Down>", opts)
-vim.keymap.set("n", "<C-h>", "<C-W><Left>", opts)
-vim.keymap.set("n", "<C-k>", "<C-W><Up>", opts)
-vim.keymap.set("n", "<C-l>", "<C-W><Right>", opts)
+vim.keymap.set("n", "<C-j>", wezterm.down, opts)
+vim.keymap.set("n", "<C-h>", wezterm.left, opts)
+vim.keymap.set("n", "<C-k>", wezterm.up, opts)
+vim.keymap.set("n", "<C-l>", wezterm.right, opts)
 vim.keymap.set("n", "L", ":FloatPrompt<CR>", opts)
 vim.keymap.set("n", "H", ":bp<CR>", opts)
 vim.keymap.set("n", "n", "nzzzv", opts)
