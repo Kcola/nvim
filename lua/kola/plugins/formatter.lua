@@ -10,6 +10,9 @@ return {
         local ft = require("Comment.ft")
         ft.set("json", "//%s")
 
+        local utils = require("kola.utils")
+        local formattingUtils = require("formatter.util")
+
         -- Enable `lukas-reineke/indent-blankline.nvim`
         -- See `:help indent_blankline.txt`
         require("ibl").setup({
@@ -29,18 +32,42 @@ return {
 
         local function eslint()
             local root = get_package_root()
-            return {
-                exe = "eslint_d",
-                args = {
-                    "--stdin",
-                    "--stdin-filename",
-                    util.escape_path(util.get_current_buffer_file_path()),
-                    "--fix-to-stdout",
-                },
-                cwd = root,
-                stdin = true,
-                try_node_modules = true,
-            }
+            local projectName = utils.get_git_repo_name()
+
+            local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
+
+            if projectName == "power-platform-ux" then
+                return {
+                    exe = "eslint_d",
+                    args = {
+                        "--stdin",
+                        "--stdin-filename",
+                        util.escape_path(util.get_current_buffer_file_path()),
+                        "--fix-to-stdout",
+                    },
+                    cwd = root,
+                    stdin = true,
+                    try_node_modules = true,
+                }
+            else
+                return {
+                    exe = "eslint_d",
+                    args = {
+                        "--stdin",
+                        "--stdin-filename",
+                        formattingUtils.escape_path(formattingUtils.get_current_buffer_file_path()),
+                        "--fix-to-stdout",
+                        "--rulesdir",
+                        build_scripts_path .. "/lib/eslint-rules",
+                        "--resolve-plugins-relative-to",
+                        build_scripts_path .. "/node_modules",
+                        "--eslint-path",
+                        build_scripts_path .. "/node_modules/eslint",
+                    },
+                    stdin = true,
+                    try_node_modules = true,
+                }
+            end
         end
 
         require("formatter").setup({

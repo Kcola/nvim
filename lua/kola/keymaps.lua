@@ -19,8 +19,8 @@ vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
 
 -- Navigation
-vim.keymap.set("n", "<Tab>", ":bnext<CR>", opts)
-vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>", opts)
+vim.keymap.set("n", "<Tab>", ":cnext<CR>", opts)
+vim.keymap.set("n", "<S-Tab>", ":cprevious<CR>", opts)
 vim.keymap.set("n", "<C-j>", wezterm.down, opts)
 vim.keymap.set("n", "<C-h>", wezterm.left, opts)
 vim.keymap.set("n", "<C-k>", wezterm.up, opts)

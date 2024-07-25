@@ -234,6 +234,17 @@ return {
             },
         })
 
+        local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
+        require("lspconfig").eslint.setup({
+            settings = {
+                nodePath = build_scripts_path .. "/node_modules",
+                options = {
+                    rulePaths = { build_scripts_path .. "/lib/eslint-rules" },
+                    resolvePluginsRelativeTo = build_scripts_path .. "/node_modules",
+                },
+            },
+        })
+
         -- Telescipe UI select
         -- Code actions doesn't have a global handler so we need to roll our sleeves a bit
         --------------------------------------------------------------------------------------------------
