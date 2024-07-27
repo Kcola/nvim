@@ -6,7 +6,6 @@ return {
         local entry_display = require("telescope.pickers.entry_display")
         local config = CONFIG.telescope
         local utils = require("telescope.utils")
-        local personalUtils = require("kola.utils")
         local strings = require("plenary.strings")
         local conf = require("telescope.config").values
         local actions = require("telescope.actions")
@@ -199,16 +198,7 @@ return {
             end
         end
 
-        local projectName = personalUtils.get_git_repo_name()
-
-        local ignoreFiles = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" }
-
-        if projectName == "power-platform-ux" then
-            -- ignore all files in the locales folder except for the en-US folder, use linux file globbing
-            local additionalIgnoreFiles = { "locales/!(en-US)" }
-
-            ignoreFiles = vim.list_extend(ignoreFiles, additionalIgnoreFiles)
-        end
+        local ignoreFiles = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales" }
 
         -- [[ Configure Telescope ]]
         -- See `:help telescope` and `:help telescope.setup()`
@@ -265,7 +255,7 @@ return {
                     },
                 },
                 grep_string = {
-                    file_ignore_patterns = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim" },
+                    file_ignore_patterns = ignoreFiles,
                     search_dirs = config,
                 },
                 git_branches = {

@@ -36,7 +36,7 @@ return {
 
             local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
 
-            if projectName == "power-platform-ux" then
+            if projectName ~= "power-platform-ux" then
                 return {
                     exe = "eslint_d",
                     args = {
