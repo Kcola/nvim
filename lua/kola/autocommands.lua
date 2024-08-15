@@ -1,7 +1,7 @@
 local utils = require("kola.utils")
 local function view_commit()
-    local line = vim.fn.getline(".")
-    vim.cmd("DiffviewOpen " .. line:firstword() .. "^!")
+    local firstWord = vim.fn.expand("<cWORD>")
+    vim.cmd("DiffviewOpen " .. firstWord .. "^!")
 end
 
 vim.api.nvim_create_user_command("DeleteQuickFixListEntries", function()

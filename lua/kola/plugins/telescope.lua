@@ -1,6 +1,6 @@
 return {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim" },
+    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-live-grep-args.nvim" },
     config = function()
         local pickers = require("telescope.pickers")
         local entry_display = require("telescope.pickers.entry_display")
@@ -199,6 +199,7 @@ return {
         end
 
         local ignoreFiles = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales" }
+        local lga_actions = require("telescope-live-grep-args.actions")
 
         -- [[ Configure Telescope ]]
         -- See `:help telescope` and `:help telescope.setup()`
@@ -298,10 +299,27 @@ return {
                         },
                     },
                 },
+                live_grep_args = {
+                    auto_quoting = true, -- enable/disable auto-quoting
+                    -- define mappings, e.g.
+                    mappings = { -- extend mappings
+                        i = {
+                            ["<C-k>"] = lga_actions.quote_prompt(),
+                            ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
+                            -- freeze the current list and start a fuzzy search in the frozen list
+                            ["<C-space>"] = actions.to_fuzzy_refine,
+                        },
+                    },
+                    -- ... also accepts theme settings, for example:
+                    -- theme = "dropdown", -- use dropdown theme
+                    -- theme = { }, -- use own theme spec
+                    -- layout_config = { mirror=true }, -- mirror preview pane
+                },
             },
         })
 
         require("telescope").load_extension("file_browser")
+        require("telescope").load_extension("live_grep_args")
 
         pcall(require("telescope").load_extension, "fzf")
 
@@ -338,7 +356,12 @@ return {
             require("telescope.builtin").grep_string,
             { desc = "[S]earch current [W]ord" }
         )
-        vim.keymap.set("n", "<leader>ff", require("telescope.builtin").live_grep, { desc = "[S]earch by [G]rep" })
+        vim.keymap.set(
+            "n",
+            "<leader>ff",
+            require("telescope").extensions.live_grep_args.live_grep_args,
+            { desc = "[S]earch by [G]rep" }
+        )
         vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
         vim.keymap.set("n", "<c-b>", require("telescope.builtin").buffers, { desc = "[S]earch [B]uffers" })
         vim.api.nvim_set_keymap(
