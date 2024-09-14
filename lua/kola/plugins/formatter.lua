@@ -74,6 +74,9 @@ return {
             logging = true,
             log_level = vim.log.levels.WARN,
             filetype = {
+                fish = {
+                    require("formatter.filetypes.fish").fishindent,
+                },
                 lua = {
                     require("formatter.filetypes.lua").stylua,
                 },
