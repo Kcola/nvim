@@ -5,20 +5,15 @@ return { -- Highlight, edit, and navigate code
             highlight = {
                 enable = true,
             },
-            ensure_installed = { "lua", "typescript", "c_sharp", "javascript", "json" },
+            ensure_installed = { "lua", "typescript", "c_sharp", "javascript", "json", "nu" },
             sync_install = true,
             build = ":TSUpdate",
             indent = { enable = true },
         })
-        local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
-
-        parser_config.nu = {
-            install_info = {
-                url = "https://github.com/nushell/tree-sitter-nu",
-                files = { "src/parser.c" },
-                branch = "main",
-            },
-            filetype = "nu",
-        }
     end,
+    dependencies = {
+        -- NOTE: additional parser
+        { "nushell/tree-sitter-nu" },
+    },
+    build = ":TSUpdate",
 }
