@@ -211,9 +211,13 @@ return {
                 prompt_prefix = " >",
                 color_devicons = true,
                 mappings = {
+                    n = {
+                        ["<leader>s"] = actions.select_vertical,
+                    },
                     i = {
                         ["<C-u>"] = false,
                         ["<C-d>"] = false,
+                        ["<leader>s"] = actions.select_vertical,
                     },
                 },
             },
