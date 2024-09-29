@@ -198,7 +198,8 @@ return {
             end
         end
 
-        local ignoreFiles = { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales" }
+        local ignoreFiles =
+            { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales", ".*tmux/plugins/" }
         local lga_actions = require("telescope-live-grep-args.actions")
 
         -- [[ Configure Telescope ]]
