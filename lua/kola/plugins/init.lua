@@ -19,5 +19,5 @@ return {
     "tpope/vim-rhubarb",
     "tpope/vim-sleuth",
     "nvim-telescope/telescope-fzf-native.nvim",
-    "ojroques/nvim-bufdel"
+    "ojroques/nvim-bufdel",
 }
