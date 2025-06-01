@@ -8,8 +8,6 @@ return {
             disable_mouse = false,
         },
     },
-    "neovim/nvim-lspconfig",
-    { "j-hui/fidget.nvim", tag = "legacy" },
     {
         "nvim-telescope/telescope-file-browser.nvim",
         dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" },
