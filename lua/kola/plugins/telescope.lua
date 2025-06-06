@@ -1,6 +1,9 @@
 return {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-lua/plenary.nvim", "nvim-telescope/telescope-live-grep-args.nvim" },
+    dependencies = {
+        "nvim-lua/plenary.nvim",
+        "nvim-telescope/telescope-ui-select.nvim",
+    },
     config = function()
         local pickers = require("telescope.pickers")
         local entry_display = require("telescope.pickers.entry_display")
@@ -11,7 +14,7 @@ return {
         local actions = require("telescope.actions")
         local finders = require("telescope.finders")
         local action_state = require("telescope.actions.state")
-        local fb_actions = require("telescope").extensions.file_browser.actions
+        local make_entry = require("telescope.make_entry")
 
         local checkout = function(prompt_bufnr)
             local selection = action_state.get_selected_entry()
@@ -198,9 +201,54 @@ return {
             end
         end
 
+        local live_multigrep = function(opts)
+            opts = opts or {}
+            opts.cwd = opts.cwd or vim.uv.cwd()
+
+            local finder = finders.new_async_job({
+                command_generator = function(prompt)
+                    if not prompt or prompt == "" then
+                        return nil
+                    end
+
+                    local pieces = vim.split(prompt, "  ")
+                    local args = { "rg" }
+                    if pieces[1] then
+                        table.insert(args, "-e")
+                        table.insert(args, pieces[1])
+                    end
+                    if pieces[2] then
+                        table.insert(args, "-g")
+                        table.insert(args, pieces[2])
+                    end
+
+                    return vim.tbl_flatten({
+                        args,
+                        "--color=never",
+                        "--no-heading",
+                        "--with-filename",
+                        "--line-number",
+                        "--column",
+                        "--smart-case",
+                    })
+                end,
+                entry_maker = make_entry.gen_from_vimgrep(opts),
+                cwd = opts.cwd,
+            })
+
+            pickers
+                .new(opts, {
+                    debounce = 100,
+                    prompt_title = "Live Multi Grep",
+                    finder = finder,
+                    previewer = conf.grep_previewer(opts),
+                    sorter = require("telescope.sorters").empty(),
+                })
+                :find()
+        end
+
         local ignoreFiles =
             { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales", ".*tmux/plugins/" }
-        local lga_actions = require("telescope-live-grep-args.actions")
 
         -- [[ Configure Telescope ]]
         -- See `:help telescope` and `:help telescope.setup()`
@@ -285,46 +333,18 @@ return {
                 },
             },
             extensions = {
-                file_browser = {
-                    hijack_netrw = true,
-                    initial_mode = "normal",
-                    file_ignore_patterns = {},
-                    previewer = false,
-                    layout_strategy = "vertical",
-                    layout_config = { prompt_position = "top", width = 0.5, height = 0.5 },
-                    mappings = {
-                        ["i"] = {},
-                        ["n"] = {
-                            ["a"] = fb_actions.create,
-                            ["y"] = fb_actions.copy,
-                            ["d"] = fb_actions.remove,
-                            ["r"] = fb_actions.rename,
-                            ["H"] = fb_actions.toggle_hidden,
-                            ["-"] = fb_actions.goto_parent_dir,
-                        },
-                    },
-                },
-                live_grep_args = {
-                    auto_quoting = true, -- enable/disable auto-quoting
-                    -- define mappings, e.g.
-                    mappings = { -- extend mappings
-                        i = {
-                            ["<C-k>"] = lga_actions.quote_prompt(),
-                            ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
-                            -- freeze the current list and start a fuzzy search in the frozen list
-                            ["<C-space>"] = actions.to_fuzzy_refine,
-                        },
-                    },
-                    -- ... also accepts theme settings, for example:
-                    -- theme = "dropdown", -- use dropdown theme
-                    -- theme = { }, -- use own theme spec
-                    -- layout_config = { mirror=true }, -- mirror preview pane
+                ["ui-select"] = {
+                    require("telescope.themes").get_dropdown({
+                        initial_mode = "normal",
+                        layout_strategy = "vertical",
+                        layout_config = { prompt_position = "top", width = 0.5, height = 0.5 },
+                    }),
                 },
             },
         })
 
         require("telescope").load_extension("file_browser")
-        require("telescope").load_extension("live_grep_args")
+        require("telescope").load_extension("ui-select")
 
         pcall(require("telescope").load_extension, "fzf")
 
@@ -361,20 +381,9 @@ return {
             require("telescope.builtin").grep_string,
             { desc = "[S]earch current [W]ord" }
         )
-        vim.keymap.set(
-            "n",
-            "<leader>ff",
-            require("telescope").extensions.live_grep_args.live_grep_args,
-            { desc = "[S]earch by [G]rep" }
-        )
+        vim.keymap.set("n", "<leader>ff", live_multigrep, { desc = "[S]earch by [G]rep" })
         vim.keymap.set("n", "<leader>sd", require("telescope.builtin").diagnostics, { desc = "[S]earch [D]iagnostics" })
         vim.keymap.set("n", "<c-b>", require("telescope.builtin").buffers, { desc = "[S]earch [B]uffers" })
-        vim.api.nvim_set_keymap(
-            "n",
-            "<leader>t",
-            ":Telescope file_browser path=%:p:h select_buffer=true<CR>",
-            { noremap = true }
-        )
     end,
     keys = { {
         "<c-p>",

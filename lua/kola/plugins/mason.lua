@@ -10,9 +10,6 @@ return {
 
         -- Useful status updates for LSP.
         { "j-hui/fidget.nvim", opts = {} },
-
-        -- Allows extra capabilities provided by blink.cmp
-        "saghen/blink.cmp",
     },
     config = function()
         -- Brief aside: **What is LSP?**
@@ -33,7 +30,6 @@ return {
         --  - Autocompletion
         --  - Symbol Search
         --  - and more!
-        --
         -- Thus, Language Servers are external tools that must be installed separately from
         -- Neovim. This is where `mason` and related plugins come into play.
         --
@@ -57,6 +53,17 @@ return {
                     vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
                 end
 
+                -- Rename the variable under your cursor.
+                --  Most Language Servers support renaming across files, etc.
+                map("<leader>rn", vim.lsp.buf.rename, "[R]e[n]ame")
+
+                map("[g", vim.diagnostic.goto_prev, "[G]oto Previous [D]iagnostic")
+                map("]g", vim.diagnostic.goto_next, "[G]oto Next [D]iagnostic")
+                map("<leader>e", vim.diagnostic.open_float, "Open [E]rror Float")
+
+                -- Execute a code action, usually your cursor needs to be on top of an error
+                -- or a suggestion from your LSP for this to activate.
+                map("<leader>qf", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
                 map("gd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
                 map("gr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
                 map("gI", vim.lsp.buf.implementation, "[G]oto [I]mplementation")

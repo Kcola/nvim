@@ -54,7 +54,7 @@ return {
             return self:match("^([%w]+)")
         end
 
-        vim.keymap.set("n", "gs", open)
+        -- vim.keymap.set("n", "gs", open)
         vim.keymap.set("n", "<leader>history", "<cmd>DiffviewFileHistory %<cr>", opts)
 
         return {
