@@ -5,7 +5,17 @@ return { -- Highlight, edit, and navigate code
             highlight = {
                 enable = true,
             },
-            ensure_installed = { "lua", "typescript", "c_sharp", "javascript", "json", "nu", "ron" },
+            ensure_installed = {
+                "lua",
+                "typescript",
+                "c_sharp",
+                "javascript",
+                "json",
+                "nu",
+                "ron",
+                "markdown",
+                "markdown_inline",
+            },
             sync_install = true,
             build = ":TSUpdate",
             indent = { enable = true },

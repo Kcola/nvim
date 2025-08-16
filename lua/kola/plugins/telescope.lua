@@ -247,8 +247,16 @@ return {
                 :find()
         end
 
-        local ignoreFiles =
-            { "node_modules", "lib", ".git", ".*exe", ".*dll", ".*/nvim/lazy.nvim", "^locales", ".*tmux/plugins/" }
+        local ignoreFiles = {
+            "node_modules",
+            "lib",
+            ".git",
+            ".*exe",
+            ".*dll",
+            ".*/nvim/lazy.nvim",
+            "^locales",
+            ".*tmux/plugins/",
+        }
 
         -- [[ Configure Telescope ]]
         -- See `:help telescope` and `:help telescope.setup()`

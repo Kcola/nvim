@@ -26,15 +26,6 @@ return {
             vim.cmd("DiffviewOpen")
         end
 
-        local load_files_into_buffer = function()
-            for _, filetree in pairs(lib.get_current_view().files) do
-                for _, value in ipairs(filetree) do
-                    vim.fn.bufload(vim.fn.bufadd(value.absolute_path))
-                end
-            end
-            P("All change files loaded")
-        end
-
         require("diffview").setup({
             key_bindings = {
                 file_panel = {
