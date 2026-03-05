@@ -201,7 +201,11 @@ return {
             --    https://github.com/pmizio/typescript-tools.nvim
             --
             -- But for many setups, the LSP (`ts_ls`) will work just fine
-            ts_ls = {},
+            ts_ls = {
+                init_options = {
+                    maxTsServerMemory = 8192,
+                },
+            },
             eslint = {},
             lua_ls = {
                 -- cmd = { ... },
@@ -238,22 +242,14 @@ return {
         })
         require("mason-tool-installer").setup({ ensure_installed = ensure_installed })
 
-        require("mason-lspconfig").setup({
-            ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-            automatic_installation = false,
-            handlers = {
-                function(server_name)
-                    local server = servers[server_name] or {}
-                    -- This handles overriding only values explicitly passed
-                    -- by the server configuration above. Useful when disabling
-                    -- certain features of an LSP (for example, turning off formatting for ts_ls)
-                    server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
-                    require("lspconfig")[server_name].setup(server)
-                end,
-            },
-        })
+        for name, server in pairs(servers) do
+            server.capabilities = vim.tbl_deep_extend("force", {}, capabilities, server.capabilities or {})
+            vim.lsp.config(name, server)
+            vim.lsp.enable(name)
+        end
+
         local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
-        require("lspconfig").eslint.setup({
+        vim.lsp.config("eslint", {
             settings = {
                 nodePath = build_scripts_path .. "/node_modules",
                 options = {
@@ -262,5 +258,36 @@ return {
                 },
             },
         })
+        -- Special Lua Config, as recommended by neovim help docs
+        vim.lsp.config("lua_ls", {
+            on_init = function(client)
+                if client.workspace_folders then
+                    local path = client.workspace_folders[1].name
+                    if
+                        path ~= vim.fn.stdpath("config")
+                        and (vim.uv.fs_stat(path .. "/.luarc.json") or vim.uv.fs_stat(path .. "/.luarc.jsonc"))
+                    then
+                        return
+                    end
+                end
+
+                client.config.settings.Lua = vim.tbl_deep_extend("force", client.config.settings.Lua, {
+                    runtime = {
+                        version = "LuaJIT",
+                        path = { "lua/?.lua", "lua/?/init.lua" },
+                    },
+                    workspace = {
+                        checkThirdParty = false,
+                        -- NOTE: this is a lot slower and will cause issues when working on your own configuration.
+                        --  See https://github.com/neovim/nvim-lspconfig/issues/3189
+                        library = vim.api.nvim_get_runtime_file("", true),
+                    },
+                })
+            end,
+            settings = {
+                Lua = {},
+            },
+        })
+        vim.lsp.enable("lua_ls")
     end,
 }

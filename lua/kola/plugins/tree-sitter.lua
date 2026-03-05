@@ -1,7 +1,7 @@
 return { -- Highlight, edit, and navigate code
     "nvim-treesitter/nvim-treesitter",
     config = function()
-        require("nvim-treesitter.configs").setup({
+        require("nvim-treesitter").setup({
             highlight = {
                 enable = true,
             },
