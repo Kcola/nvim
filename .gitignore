@@ -1,2 +1,3 @@
 .luarc.json
 packer_compiled.lua
+lua/kola/work_config.lua

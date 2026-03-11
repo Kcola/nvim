@@ -12,6 +12,10 @@ return {
 
         local utils = require("kola.utils")
         local formattingUtils = require("formatter.util")
+        local work_config = (function()
+            local ok, cfg = pcall(require, "kola.work_config")
+            return ok and cfg or { biome_projects = {}, custom_eslint_projects = {} }
+        end)()
 
         -- Enable `lukas-reineke/indent-blankline.nvim`
         -- See `:help indent_blankline.txt`
@@ -30,13 +34,46 @@ return {
             return vim.fn.fnamemodify(package_json_path, ":p:h") .. "/"
         end
 
+        local function biome()
+            return {
+                exe = "biome",
+                args = {
+                    "format",
+                    "--write",
+                    "--stdin-file-path",
+                    util.escape_path(util.get_current_buffer_file_path()),
+                },
+                cwd = get_package_root(),
+                stdin = true,
+                try_node_modules = true,
+            }
+        end
+
+        local function eslint_or_biome()
+            local projectName = utils.get_git_repo_name()
+            for _, name in ipairs(work_config.biome_projects) do
+                if projectName == name then
+                    return biome()
+                end
+            end
+            return eslint()
+        end
+
         local function eslint()
             local root = get_package_root()
             local projectName = utils.get_git_repo_name()
 
             local build_scripts_path = vim.fn.finddir("packages", ";") .. "/build-scripts"
 
-            if projectName ~= "power-platform-ux" then
+            local use_custom_eslint = false
+            for _, name in ipairs(work_config.custom_eslint_projects) do
+                if projectName == name then
+                    use_custom_eslint = true
+                    break
+                end
+            end
+
+            if not use_custom_eslint then
                 return {
                     exe = "eslint_d",
                     args = {
@@ -81,13 +118,13 @@ return {
                     require("formatter.filetypes.lua").stylua,
                 },
                 typescript = {
-                    eslint,
+                    eslint_or_biome,
                 },
                 javascript = {
                     require("formatter.filetypes.json").prettier,
                 },
                 typescriptreact = {
-                    eslint,
+                    eslint_or_biome,
                 },
                 json = {
                     require("formatter.filetypes.json").prettier,
