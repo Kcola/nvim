@@ -207,6 +207,7 @@ return {
                 },
             },
             eslint = {},
+            biome = {},
             lua_ls = {
                 -- cmd = { ... },
                 -- filetypes = { ... },

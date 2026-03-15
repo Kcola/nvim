@@ -59,6 +59,16 @@ return {
             return eslint()
         end
 
+        local function prettier_or_biome()
+            local projectName = utils.get_git_repo_name()
+            for _, name in ipairs(work_config.biome_projects) do
+                if projectName == name then
+                    return biome()
+                end
+            end
+            return require("formatter.filetypes.json").prettier()
+        end
+
         local function eslint()
             local root = get_package_root()
             local projectName = utils.get_git_repo_name()
@@ -121,13 +131,13 @@ return {
                     eslint_or_biome,
                 },
                 javascript = {
-                    require("formatter.filetypes.json").prettier,
+                    prettier_or_biome,
                 },
                 typescriptreact = {
                     eslint_or_biome,
                 },
                 json = {
-                    require("formatter.filetypes.json").prettier,
+                    prettier_or_biome,
                 },
             },
         })
